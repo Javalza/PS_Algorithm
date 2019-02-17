@@ -1,0 +1,43 @@
+package 문제;
+
+import java.util.Scanner;
+import java.util.Stack;
+
+public class 스택수열 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int n = sc .nextInt();	
+		int[] arr= new int[n];
+		for(int i=0;i<n;i++) {
+			arr[i] = sc.nextInt();
+		}
+		StringBuffer sb = new StringBuffer(); // 출력 변수 
+		Stack<Integer> s = new Stack<>();
+		int idx = 0 ;
+		int i = 1;
+		int max = i ; //stack push 후 나중에 넣을 데이터 저장.		
+		
+		while(idx<arr.length) {
+			 //    * push하는것이 수열의 값과 일치시키기 위한 것이다. 따라서 push pop 계속 일어남. *  
+			if(s.empty()||arr[idx]> s.peek()) {
+				for(i=max;i<=arr[idx];i++) {
+					s.push(i);	
+					sb.append("+\n");
+				} 
+				max = i;
+			}
+			//종료조건 
+			if(s.peek() > arr[idx]) {
+				sb = null; //기존 객체 버림
+				sb = new StringBuffer("NO");
+				break;
+			}
+			
+			s.pop(); 
+			idx++; 
+			sb.append("-\n");
+		}
+		System.out.println(sb.toString());
+	}
+
+}
