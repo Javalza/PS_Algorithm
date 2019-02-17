@@ -1,89 +1,105 @@
+package ë¬¸ì œ;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-class baseBall {
-	String number;
-	int strike;
-	int ball;
+//ì…ë ¥ìœ¼ë¡œ ì£¼ì–´ì§„ ìˆ˜ê°€ ì •ë‹µì¸ì§€ í™•ì¸ 
+//S/Bì´ ì „ì²´ìˆ˜ì™€ ì¼ì¹˜í•˜ëŠ”ì§€ í™•ì¸í•œë‹¤. 
+//ì…ë ¥ì˜ ì¡°ê±´ì´ ëª¨ë‘ ë§ëŠ”ê²½ìš° ì¡°ê±´ì˜ ìˆ˜ê°€ ë  ìˆ˜ ìˆìŒ.
+class baseball {
+	public String number;
+	public int strike;
+	public int ball;
 
-	public baseBall(String[] input) {
-		this.number = input[0];
-		this.strike = Integer.parseInt(input[1]);
-		this.ball = Integer.parseInt(input[2]);
+	public baseball(String[] str) {
+		this.number = str[0];
+		this.strike = Integer.parseInt(str[1]);
+		this.ball = Integer.parseInt(str[2]);
 	}
 }
 
-public class ¼ıÀÚ¾ß±¸ {
-	static baseBall[] b;
+public class ìˆ«ìì•¼êµ¬ {
+	private static baseball b[];
 
 	public static void main(String[] args) throws IOException {
-		// 1. 123 ~ 987 ¼ıÀÚ ´ëÀÔ ,
-		// 2. ¿¹½Ã Áß S /BÀÇ ¼ö¿Í ÀÏÄ¡ÇÏ´ÂÁö È®ÀÎ
-		// 3. ÀÏÄ¡ ¼ö ¹İÈ¯.
-		// Áï 123 11
-		// 356 1 0 ¿¹½Ã·Î 3ÀÚ¸® ¾Æ¹« ¼ıÀÚ¸¦ ´ëÀÔÇÏ¿© µÎ Á¶°ÇÀÇ 1 1°ú 1 0 ÀÌ ¸ÂÀ¸¸é ±× ¼ö´Â ÀÏÄ¡ ¼ö·Î ÀÎÁ¤ÇÑ´Ù.
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
-		b = new baseBall[n];
-		for (int i = 0; i < n; i++) {
-			b[i] = new baseBall(in.readLine().split(" ")); // sc.nextLine().split(" "); Â÷ÀÌ ?
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = 0, i;
+		do {
+			try {
+				n = sc.nextInt(); // ë¬¼ìŒê³¼ ì§ˆë¬¸ ìˆ˜
+			} catch (InputMismatchException e) {
+				sc = new Scanner(System.in); // Scanner í•¨ìˆ˜ ì´ˆê¸°í™” (ì•ˆí•  ê²½ìš° ë¬´í•œë£¨í”„ ë°œ
+			}
+		} while (n < 1 || n > 100);
+		// sc.nextLine(); nextInt() ì…ë ¥ë°›ì€í›„ nextLine()í•˜ì§€ ì•Šìœ¼ë©´ ì—ëŸ¬ ë°œìƒ (SCannerí•¨ìˆ˜ ì´ìš©ì‹œ)
+		b = new baseball[n];
+
+		String[] s;
+		boolean t = false;
+		int num1, num2, num3;
+		for (i = 0; i < n; i++) {
+			// b[i] = new baseball(sc.nextLine().split(" "));
+			do {
+				 t = false;
+				s = br.readLine().split(" ");
+				try {
+					num1 = Integer.parseInt(s[0]);
+					num2 = Integer.parseInt(s[2]);
+					num3 = Integer.parseInt(s[2]);
+				} catch (NumberFormatException e) {
+					t= true;
+					// = new BufferedReader(new InputStreamReader(System.in));
+				}
+			} while (s.length < 3 || s.length > 3 || t);
+			b[i] = new baseball(s); 
 		}
 		System.out.println(playGame());
 	}
 
-	public static int playGame() {
+	static int playGame() {
 		int result = 0;
-		String number = "";
-		char[] c; // ¸·´ëÀÔ ¼ıÀÚ
-		char[] baseNum; // ¿¹½Ã ¼ıÀÚ
-		int j = 0;
+		// ì¤‘ë³µì—†ëŠ” 3ìë¦¬ ìˆ˜ 123 ~ 987 ëŒ€ì…ì‹œì‘
 		for (int i = 123; i <= 987; i++) {
-			number = String.valueOf(i);
-			c = number.toCharArray();
-			// ÇÏ³ª¶óµµ ¼­·Î °°Àº ¼ö°¡ ÀÖÀ»°æ¿ì Á¶°Ç ¸¸Á·ÇÏÁö ¾ÊÀ½
-			if (c[0] == c[1] || c[0] == c[2] || c[1] == c[2] || c[2] == c[0])
+			boolean isTrue = true;
+			String number = String.valueOf(i);
+			char[] BFnum = number.toCharArray();
+			// ì„œë¡œë‹¤ë¥¸ 3ìë¦¬ ìˆ˜ ì¡°ê±´ì„ ë§Œì¡±í•´ì•¼í•œë‹¤.
+			if (BFnum[0] == BFnum[1] || BFnum[0] == BFnum[2] || BFnum[1] == BFnum[2])
 				continue;
-			if (IsSame(c))
+
+			for (int j = 0; j < b.length; j++) {
+				int strike = 0;
+				int ball = 0;
+
+				if (BFnum[0] == b[j].number.charAt(0))
+					strike++;
+				else if (BFnum[0] == b[j].number.charAt(1) || BFnum[0] == b[j].number.charAt(2))
+					ball++;
+
+				if (BFnum[1] == b[j].number.charAt(1))
+					strike++;
+				else if (BFnum[1] == b[j].number.charAt(0) || BFnum[1] == b[j].number.charAt(2))
+					ball++;
+
+				if (BFnum[2] == b[j].number.charAt(2))
+					strike++;
+				else if (BFnum[2] == b[j].number.charAt(0) || BFnum[2] == b[j].number.charAt(1))
+					ball++;
+
+				// í•˜ë‚˜ë¼ë„ í‹€ë¦´ê²½ìš° ë‹¤ë¥¸ ëœë¤ ìˆ«ìë¶€í„° ì‹œì‘í•œë‹¤.(ì…ë ¥ë°›ì€ ì¡°ê±´ê³¼ ë§ì•„ì•¼ í•˜ë¯€ë¡œ)
+				if (strike != b[j].strike || ball != b[j].ball) {
+					isTrue = false;
+					break;
+				}
+			}
+			if (isTrue)
 				result++;
 
 		}
 		return result;
-	}
-
-	public static boolean IsSame(char[] c) {
-		int i, j;
-		char[] baseNum; // ÀÔ·Â¹ŞÀº ¼ö
-		int result = 0;
-
-		// 123~987 Áß , ÀÔ·Â¹ŞÀº s,b°ú ÀÏÄ¡ÇÏ´ÂÁö °Ë»ç
-		for (j = 0; j < b.length; j++) {
-			boolean chk = true;
-			int strike = 0, ball = 0; // -===> ... s/b ¸®¼ÂÇØ¾ß‰Î
-			baseNum = b[j].number.toCharArray();
-			if (c[0] == baseNum[0])
-				strike++;
-			else if (c[0] == baseNum[1] || c[0] == baseNum[2])
-				ball++;
-
-			if (c[1] == baseNum[1])
-				strike++;
-			else if (c[1] == baseNum[0] || c[2] == baseNum[2])
-				ball++;
-
-			if (c[2] == baseNum[2])
-				strike++;
-			else if (c[2] == baseNum[0] || c[2] == baseNum[1])
-				ball++;
-			
-			if (b[j].strike != strike || b[j].ball != ball) { // °°Áö¾ÊÀº °æ¿ìÀÇ ¼ö°¡ ´õ ¸¹À¸¹Ç·Î
-				return false;
-			}
-		
-		}
-		return true;
 	}
 }
